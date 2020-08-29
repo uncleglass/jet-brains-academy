@@ -1,9 +1,9 @@
 package search;
 
 public class Person {
-    private String firstName;
-    private String lastName;
-    private String email;
+    private String firstName = "";
+    private String lastName = "";
+    private String email = "";
 
     public Person(String firstName, String lastName, String email) {
         this.firstName = firstName;
@@ -29,8 +29,6 @@ public class Person {
 
     @Override
     public String toString() {
-        return firstName + " " +
-                (lastName.isEmpty() ? "" : lastName + " ") +
-                (email.isEmpty() ? "" : email);
+        return (firstName + " " + lastName + " " + email).trim();
     }
 }
