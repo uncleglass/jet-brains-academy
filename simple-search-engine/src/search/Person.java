@@ -23,12 +23,45 @@ public class Person {
     public boolean containsData(String dataToSearch) {
 
         return firstName.toLowerCase().contains(dataToSearch.toLowerCase()) ||
-                (lastName != null && lastName.toLowerCase().contains(dataToSearch.toLowerCase())) ||
-                (email != null && email.toLowerCase().contains(dataToSearch.toLowerCase()));
+                lastName.toLowerCase().contains(dataToSearch.toLowerCase()) ||
+                email.toLowerCase().contains(dataToSearch.toLowerCase());
     }
 
     @Override
     public String toString() {
         return (firstName + " " + lastName + " " + email).trim();
+    }
+
+    public boolean noFirstName() {
+        return firstName.isEmpty();
+    }
+
+    public boolean noLastName() {
+        return lastName.isEmpty();
+    }
+
+    public boolean noEmail() {
+        return email.isEmpty();
+    }
+
+    public String getFirstName() {
+        if (noFirstName()) {
+            return null;
+        }
+        return firstName;
+    }
+
+    public String getLastName() {
+        if (noLastName()) {
+            return null;
+        }
+        return lastName;
+    }
+
+    public String getEmail() {
+        if (noEmail()) {
+            return null;
+        }
+        return email;
     }
 }

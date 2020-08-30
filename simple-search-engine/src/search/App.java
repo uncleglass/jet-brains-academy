@@ -10,13 +10,33 @@ import static search.UserInterface.sendMessage;
 
 public class App {
     private Data appData = new Data();
-    ;
 
     public void loadData(String[] args) {
-        if(args.length==0) {
+        if (args.length == 0) {
             readFromInput();
         } else {
             readFromFile(args);
+        }
+        invertIndex();
+    }
+
+    private void invertIndex() {
+        List<Person> persons = appData.getPersons();
+        for (int i = 0; i < persons.size(); i++) {
+            Person person = persons.get(i);
+            String firstName = person.getFirstName();
+            if (firstName != null) {
+                appData.addIndex(firstName, i);
+            }
+            String lastName = person.
+                    getLastName();
+            if (lastName != null) {
+                appData.addIndex(lastName, i);
+            }
+            String email = person.getEmail();
+            if (email != null) {
+                appData.addIndex(email, i);
+            }
         }
     }
 
@@ -81,14 +101,16 @@ public class App {
     private void findData() {
         sendMessage("Enter a name or email to search all suitable people.");
         String dataToSearch = getInput();
-        List<Person> foundPersons = SearchEngine.search(appData.getPersons(), dataToSearch);
+//        List<Person> foundPersons = SearchEngine.search(appData.getPersons(), dataToSearch);
+        List<Integer> foundIndexes = SearchEngine.search(appData.getInvertedIndex(), dataToSearch);
 
-        if (foundPersons.isEmpty()) {
+        if (foundIndexes == null) {
             sendMessage("No matching people found.");
         } else {
-            sendMessage("Found people:");
-            for (Person person : foundPersons) {
-                sendMessage(person.toString());
+            sendMessage(foundIndexes.size() + " persons found:");
+            List<Person> persons = appData.getPersons();
+            for (int i : foundIndexes) {
+                sendMessage(persons.get(i).toString());
             }
         }
         sendMessage("");
