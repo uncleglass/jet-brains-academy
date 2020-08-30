@@ -1,6 +1,9 @@
 package search;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Scanner;
 
 import static search.UserInterface.getInput;
 import static search.UserInterface.sendMessage;
@@ -9,7 +12,29 @@ public class App {
     private Data appData = new Data();
     ;
 
-    public void loadData() {
+    public void loadData(String[] args) {
+        if(args.length==0) {
+            readFromInput();
+        } else {
+            readFromFile(args);
+        }
+    }
+
+    private void readFromFile(String[] args) {
+        String pathToFile = args[1];
+        File file = new File(pathToFile);
+
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                Person newPerson = Converter.toPerson(scanner.nextLine());
+                appData.add(newPerson);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No file found: " + pathToFile);
+        }
+    }
+
+    private void readFromInput() {
         sendMessage("Enter the number of people:");
         int numberOfPeople = Integer.parseInt(getInput());
 
