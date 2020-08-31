@@ -9,7 +9,7 @@ import static search.UserInterface.getInput;
 import static search.UserInterface.sendMessage;
 
 public class App {
-    private Data appData = new Data();
+    private final Data appData = new Data();
 
     public void loadData(String[] args) {
         if (args.length == 0) {
@@ -21,21 +21,11 @@ public class App {
     }
 
     private void invertIndex() {
-        List<Person> persons = appData.getPersons();
-        for (int i = 0; i < persons.size(); i++) {
-            Person person = persons.get(i);
-            String firstName = person.getFirstName();
-            if (firstName != null) {
-                appData.addIndex(firstName, i);
-            }
-            String lastName = person.
-                    getLastName();
-            if (lastName != null) {
-                appData.addIndex(lastName, i);
-            }
-            String email = person.getEmail();
-            if (email != null) {
-                appData.addIndex(email, i);
+        List<String> lines = appData.getLines();
+        for (int i = 0; i < lines.size(); i++) {
+            String[] line = lines.get(i).split(" ");
+            for (String s : line) {
+                appData.addIndex(s.toLowerCase(), i);
             }
         }
     }
@@ -46,8 +36,7 @@ public class App {
 
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
-                Person newPerson = Converter.toPerson(scanner.nextLine());
-                appData.add(newPerson);
+                appData.add(scanner.nextLine());
             }
         } catch (FileNotFoundException e) {
             System.out.println("No file found: " + pathToFile);
@@ -60,8 +49,7 @@ public class App {
 
         sendMessage("Enter all people:");
         for (int i = 0; i < numberOfPeople; i++) {
-            Person newPerson = Converter.toPerson(getInput());
-            appData.add(newPerson);
+            appData.add(getInput());
         }
         sendMessage("");
     }
@@ -92,25 +80,40 @@ public class App {
 
     private void printData() {
         sendMessage("=== List of people ===");
-        for (Person person : appData.getPersons()) {
-            sendMessage(person.toString());
+        for (String line : appData.getLines()) {
+            sendMessage(line);
         }
         sendMessage("");
     }
 
     private void findData() {
+        sendMessage("Select a matching strategy: ALL, ANY, NONE");
+        String strategy = getInput();
+        sendMessage("");
+        switch (strategy.toUpperCase()) {
+            case "ALL":
+                appData.setSearchEngine(new AllSearchEngine());
+                break;
+            case "ANY":
+                appData.setSearchEngine(new AnySearchEngine());
+                break;
+            case "NONE":
+                appData.setSearchEngine(new NoneSearchEngine());
+                break;
+            default:
+                sendMessage("Unknown strategy");
+                return;
+        }
+
         sendMessage("Enter a name or email to search all suitable people.");
         String dataToSearch = getInput();
-//        List<Person> foundPersons = SearchEngine.search(appData.getPersons(), dataToSearch);
-        List<Integer> foundIndexes = SearchEngine.search(appData.getInvertedIndex(), dataToSearch);
-
-        if (foundIndexes == null) {
+        List<Integer> indexes = appData.search(dataToSearch);
+        if (indexes == null) {
             sendMessage("No matching people found.");
         } else {
-            sendMessage(foundIndexes.size() + " persons found:");
-            List<Person> persons = appData.getPersons();
-            for (int i : foundIndexes) {
-                sendMessage(persons.get(i).toString());
+            sendMessage(indexes.size() + " persons found:");
+            for (Integer index : indexes) {
+                sendMessage(appData.getLine(index));
             }
         }
         sendMessage("");

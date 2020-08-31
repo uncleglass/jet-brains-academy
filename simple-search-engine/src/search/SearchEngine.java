@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class SearchEngine {
-    public static List<Person> search(List<Person> persons, String dataToSearch) {
-        return persons.stream()
-                .filter(person -> person.containsData(dataToSearch))
-                .collect(Collectors.toUnmodifiableList());
-    }
+public abstract class SearchEngine {
+    public abstract List<Integer> search(Map<String, List<Integer>> indexes, String dataToSearch);
 
-    public static List<Integer> search(Map<String, List<Integer>> indexes, String dataToSearch) {
-        return indexes.get(dataToSearch);
+    protected List<Integer> intersection(List<Integer> list1, List<Integer> list2) {
+        return list1.stream()
+                .filter(list2::contains)
+                .collect(Collectors.toList());
     }
 }

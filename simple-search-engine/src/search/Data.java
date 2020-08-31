@@ -3,15 +3,23 @@ package search;
 import java.util.*;
 
 public class Data {
-    private final List<Person> persons = new ArrayList<>();
+    private final List<String> lines = new ArrayList<>();
     private final Map<String, List<Integer>> invertedIndex = new HashMap<>();
+    private SearchEngine searchEngine;
 
-    public void add(Person person) {
-        persons.add(person);
+    public void setSearchEngine(SearchEngine searchEngine) {
+        this.searchEngine = searchEngine;
     }
 
-    public List<Person> getPersons() {
-        return persons;
+    public List<Integer> search(String dataToSearch) {
+        return searchEngine.search(invertedIndex, dataToSearch);
+    }
+    public void add(String line) {
+        lines.add(line);
+    }
+
+    public List<String> getLines() {
+        return lines;
     }
 
     public void addIndex(String data, Integer index) {
@@ -25,7 +33,7 @@ public class Data {
         }
     }
 
-    public Map<String, List<Integer>> getInvertedIndex() {
-        return invertedIndex;
+    public String getLine(Integer index) {
+        return lines.get(index);
     }
 }
