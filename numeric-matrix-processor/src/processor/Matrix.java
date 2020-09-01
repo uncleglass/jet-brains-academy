@@ -1,10 +1,14 @@
 package processor;
 
 public class Matrix {
-    private int[][] data;
+    private final int[][] data;
+    private final int rowsCount;
+    private final int columnsCount;
 
     public Matrix(int rowsCount, int columnsCount) {
         this.data = new int[rowsCount][columnsCount];
+        this.rowsCount = rowsCount;
+        this.columnsCount = columnsCount;
     }
 
     public void addElement(int row, int column, int value) {
@@ -16,16 +20,16 @@ public class Matrix {
     }
 
     public boolean sameSize(Matrix matrix) {
-        return this.getRowsCount() == matrix.getRowsCount() &&
-                this.getColumnsCount() == matrix.getColumnsCount();
+        return this.rowsCount == matrix.getRowsCount() &&
+                this.columnsCount == matrix.getColumnsCount();
     }
 
     public int getRowsCount() {
-        return this.data.length;
+        return this.rowsCount;
     }
 
     public int getColumnsCount() {
-        return this.data[0].length;
+        return this.columnsCount;
     }
 
     public Matrix add(Matrix matrix) throws WrongMatrixSizeException {
@@ -33,13 +37,23 @@ public class Matrix {
             throw new WrongMatrixSizeException();
         }
 
-        int rowsCount = this.getRowsCount();
-        int columnsCount = this.getColumnsCount();
-        Matrix result = new Matrix(rowsCount, columnsCount);
+        Matrix result = new Matrix(this.rowsCount, this.columnsCount);
 
-        for (int r = 0; r < rowsCount; r++) {
-            for (int c = 0; c < columnsCount; c++) {
+        for (int r = 0; r < this.rowsCount; r++) {
+            for (int c = 0; c < this.columnsCount; c++) {
                 int value = this.getElement(r, c) + matrix.getElement(r, c);
+                result.addElement(r, c, value);
+            }
+        }
+        return result;
+    }
+
+    public Matrix multiplyByNumber(int number) {
+        Matrix result = new Matrix(this.rowsCount, this.columnsCount);
+
+        for (int r = 0; r < this.rowsCount; r++) {
+            for (int c = 0; c < this.columnsCount; c++) {
+                int value = this.getElement(r, c) * number;
                 result.addElement(r, c, value);
             }
         }
