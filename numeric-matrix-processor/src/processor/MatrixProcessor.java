@@ -24,7 +24,7 @@ public class MatrixProcessor {
     }
 
     public void multiplyMatrixByANumber() {
-        Matrix matrix = createMatrix("Enter size of first matrix: ");
+        Matrix matrix = createMatrix("Enter matrix size: ");
         fillUpMatrix("Enter matrix:", matrix);
         System.out.print("Enter constant: ");
         int number = scanner.nextInt();
@@ -77,5 +77,39 @@ public class MatrixProcessor {
             }
             System.out.println();
         }
+    }
+
+    public void transposeMatrix() {
+        printTransposeMenu();
+        System.out.print("Your choice: ");
+        String userChoice = scanner.next();
+        Matrix matrix = createMatrix("Enter matrix size: ");
+        fillUpMatrix("Enter matrix:", matrix);
+        Matrix transposedMatrix = null;
+        switch (userChoice) {
+            case "1":
+                transposedMatrix = matrix.transposeMailDiagonal();
+                break;
+            case "2":
+                transposedMatrix = matrix.transposeSideDiagonal();
+                break;
+            case "3":
+                transposedMatrix = matrix.transposeVerticalLine();
+                break;
+            case "4":
+                transposedMatrix = matrix.transposeHorizontalLine();
+                break;
+            default:
+                System.out.println("Unknown operation");
+        }
+
+        printMatrix("The result is:", transposedMatrix);
+    }
+
+    private void printTransposeMenu() {
+        System.out.println("\n1. Main diagonal\n" +
+                "2. Side diagonal\n" +
+                "3. Vertical line\n" +
+                "4. Horizontal line");
     }
 }

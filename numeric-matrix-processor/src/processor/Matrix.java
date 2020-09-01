@@ -102,4 +102,44 @@ public class Matrix {
     private boolean correctMultiplicationSize(Matrix matrix) {
         return this.columnsCount == matrix.rowsCount;
     }
+
+    public Matrix transposeMailDiagonal() {
+        Matrix transposedMatrix = new Matrix(this.columnsCount, this.rowsCount);
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0; j < columnsCount; j++) {
+                transposedMatrix.addElement(j, i, this.getElement(i, j));
+            }
+        }
+        return transposedMatrix;
+    }
+
+    public Matrix transposeSideDiagonal() {
+        Matrix transposedMatrix = new Matrix(this.columnsCount, this.rowsCount);
+        for (int i = 0, k = rowsCount - 1; i < rowsCount; i++, k--) {
+            for (int j = 0, n = columnsCount - 1; j < columnsCount; j++, n--) {
+                transposedMatrix.addElement(n, k, this.getElement(i, j));
+            }
+        }
+        return transposedMatrix;
+    }
+
+    public Matrix transposeVerticalLine() {
+        Matrix transposedMatrix = new Matrix(this.rowsCount, this.columnsCount );
+        for (int i = 0; i < rowsCount; i++) {
+            for (int j = 0, n = columnsCount - 1; j < columnsCount; j++, n--) {
+                transposedMatrix.addElement(i, n, this.getElement(i, j));
+            }
+        }
+        return transposedMatrix;
+    }
+
+    public Matrix transposeHorizontalLine() {
+        Matrix transposedMatrix = new Matrix(this.rowsCount, this.columnsCount );
+        for (int i = 0, k = rowsCount - 1; i < rowsCount; i++, k--) {
+            for (int j = 0; j < columnsCount; j++) {
+                transposedMatrix.addElement(k, j, this.getElement(i, j));
+            }
+        }
+        return transposedMatrix;
+    }
 }

@@ -22,6 +22,9 @@ public class App {
                 case "3":
                     processor.multiplyMatrices();
                     break;
+                case "4":
+                    processor.transposeMatrix();
+                    break;
                 case "0":
                     runApp = false;
                     break;
@@ -36,6 +39,7 @@ public class App {
         System.out.println("1. Add matrices\n" +
                 "2. Multiply matrix to a constant\n" +
                 "3. Multiply matrices\n" +
+                "4. Transpose matrix\n" +
                 "0. Exit");
     }
 }
